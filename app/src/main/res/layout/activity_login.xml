@@ -32,14 +32,14 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/idText"
-                android:hint="아이디"
+                android:id="@+id/emailText"
+                android:hint="이메일"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:drawableStart="@drawable/ic_baseline_person_24"
-                android:drawableLeft="@drawable/ic_baseline_person_24"
+                android:drawableStart="@drawable/ic_baseline_mail_outline_24"
+                android:drawableLeft="@drawable/ic_baseline_mail_outline_24"
                 android:padding="10dp"
                 android:singleLine="true"
                 android:background="#148F8D8D"/>

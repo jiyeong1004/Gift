@@ -37,14 +37,14 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/idText"
-                android:hint="아이디"
+                android:id="@+id/emailText"
+                android:hint="이메일"
                 android:layout_width="280dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="60dp"
-                android:drawableStart="@drawable/ic_baseline_person_24"
-                android:drawableLeft="@drawable/ic_baseline_person_24"
+                android:drawableStart="@drawable/ic_baseline_mail_outline_24"
+                android:drawableLeft="@drawable/ic_baseline_mail_outline_24"
                 android:padding="10dp"
                 android:background="#148F8D8D"/>
 
@@ -58,18 +58,6 @@
                 android:layout_marginTop="20dp"
                 android:drawableStart="@drawable/ic_baseline_lock_24"
                 android:drawableLeft="@drawable/ic_baseline_lock_24"
-                android:padding="10dp"
-                android:background="#148F8D8D"/>
-
-            <EditText
-                android:id="@+id/emailText"
-                android:hint="이메일"
-                android:layout_width="280dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:drawableStart="@drawable/ic_baseline_mail_outline_24"
-                android:drawableLeft="@drawable/ic_baseline_mail_outline_24"
                 android:padding="10dp"
                 android:background="#148F8D8D"/>
 
