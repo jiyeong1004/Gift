@@ -60,6 +60,7 @@
                 android:background="#148F8D8D"/>
 
             <Button
+                android:id="@+id/btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginLeft="20dp"
@@ -69,6 +70,7 @@
                 android:background="@drawable/login"/>
 
             <Button
+                android:id="@+id/btn_kakao_login"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginLeft="20dp"
@@ -77,6 +79,7 @@
                 android:background="@drawable/kakao_login"/>
 
             <Button
+                android:id="@+id/btn_facebook_login"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginLeft="20dp"
@@ -85,6 +88,7 @@
                 android:background="@drawable/facebook_login"/>
 
             <Button
+                android:id="@+id/btn_google_login"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginLeft="20dp"
