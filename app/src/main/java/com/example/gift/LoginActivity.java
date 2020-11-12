@@ -38,6 +38,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v){
                 String email = emailTxt.getText().toString();
                 String password = passwordTxt.getText().toString();
+                if(email.getBytes().length == 0 || password.getBytes().length == 0){
+                    return;
+                }
                 auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
