@@ -1,9 +1,7 @@
 package com.example.gift;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,6 +47,10 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(LoginActivity.this, "로그인 성공",
                                             Toast.LENGTH_SHORT).show();
                                     FirebaseUser user = auth.getCurrentUser();
+                                    ///////////////
+                                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                    LoginActivity.this.startActivity(mainIntent);
+                                    /////////////////
                                     //updateUI(user);
                                 } else {
                                     Toast.makeText(LoginActivity.this, "로그인 실패",
