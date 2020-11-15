@@ -34,19 +34,29 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = emailTxt.getText().toString();
+                final String email = emailTxt.getText().toString();
                 String password = passwordTxt.getText().toString();
+                if(password.length() < 6){
+                    Toast.makeText(RegisterActivity.this, "비밀번호는 최소 6글자 이상이어야 합니다.",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "회원가입 성공",
-                                    Toast.LENGTH_SHORT).show(); 
+                                    Toast.LENGTH_SHORT).show();
                             Intent mainIntent = new Intent(RegisterActivity.this, LoginActivity.class);
                             RegisterActivity.this.startActivity(mainIntent);
                         } else {
-                            Toast.makeText(RegisterActivity.this, "회원가입 실패",
-                                    Toast.LENGTH_SHORT).show();
+                            if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                                Toast.makeText(RegisterActivity.this, "이메일 형식을 확인해주세요.",
+                                        Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(RegisterActivity.this, "이미 등록된 이메일입니다.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });
