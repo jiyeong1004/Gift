@@ -1,7 +1,9 @@
 package com.example.gift;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
+    private String TAG = "LoginActivity";
     private FirebaseAuth auth;
     EditText emailTxt, passwordTxt;
     Button loginBtn;
@@ -37,8 +40,11 @@ public class LoginActivity extends AppCompatActivity {
                 String email = emailTxt.getText().toString();
                 String password = passwordTxt.getText().toString();
                 if(email.getBytes().length == 0 || password.getBytes().length == 0){
+                    Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 확인해주세요.",
+                            Toast.LENGTH_SHORT).show();
                     return;
                 }
+                Log.d(TAG, "email : "+email+"  password : "+password);
                 auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -47,13 +53,11 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(LoginActivity.this, "로그인 성공",
                                             Toast.LENGTH_SHORT).show();
                                     FirebaseUser user = auth.getCurrentUser();
-                                    ///////////////
                                     Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                                     LoginActivity.this.startActivity(mainIntent);
-                                    /////////////////
                                     //updateUI(user);
                                 } else {
-                                    Toast.makeText(LoginActivity.this, "로그인 실패",
+                                    Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 확인해주세요.",
                                             Toast.LENGTH_SHORT).show();
                                     //updateUI(null);
                                     // ...
