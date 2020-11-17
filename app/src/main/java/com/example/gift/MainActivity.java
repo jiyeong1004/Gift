@@ -13,7 +13,7 @@ public class MainActivity extends TabActivity {
 
         TabHost tabHost = getTabHost();
 
-        TabHost.TabSpec tabSpecHome = tabHost.newTabSpec("Home").setIndicator("메인화면");
+        TabHost.TabSpec tabSpecHome = tabHost.newTabSpec("Home").setIndicator("전체");
         tabSpecHome.setContent(R.id.linear_home);
         tabHost.addTab(tabSpecHome);
 
