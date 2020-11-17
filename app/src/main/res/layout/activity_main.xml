@@ -1,18 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@android:id/tabhost"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#ffff00">
+        android:orientation="vertical">
 
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/linear_home"
+                android:background="#FFEFA0"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/registration"
+                    android:layout_width="300dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/manual"
+                    android:scaleType="fitXY"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_unuse"
+                android:background="#A0FFEC"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="300dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/manual"
+                    android:scaleType="fitXY"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_use"
+                android:background="#F6A0FF"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="300dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/manual"
+                    android:scaleType="fitXY"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
 
-</ScrollView>
+</TabHost>
