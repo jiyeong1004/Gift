@@ -59,6 +59,8 @@ public class MainActivity extends TabActivity {
                     }else{
                         //오류나면 토스트나 다이얼로그 띄우고 로그인액티비티로
                         Toast.makeText(MainActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        MainActivity.this.startActivity(intent);
                     }
                 }
             });
