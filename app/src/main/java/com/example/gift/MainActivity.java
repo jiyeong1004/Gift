@@ -1,7 +1,10 @@
 package com.example.gift;
 
 import android.app.TabActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TabHost;
 
 public class MainActivity extends TabActivity {
@@ -10,6 +13,24 @@ public class MainActivity extends TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ImageButton manualButton = (ImageButton) findViewById(R.id.manual_registration_btn);
+        manualButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent manualIntent = new Intent(MainActivity.this, ManualActivity.class);
+                MainActivity.this.startActivity(manualIntent);
+            }
+        });
+
+        ImageButton automaticButton = (ImageButton) findViewById(R.id.automatic_registration_btn);
+        automaticButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent automaticIntent = new Intent(MainActivity.this, AutomaticActivity.class);
+                MainActivity.this.startActivity(automaticIntent);
+            }
+        });
 
         TabHost tabHost = getTabHost();
 
