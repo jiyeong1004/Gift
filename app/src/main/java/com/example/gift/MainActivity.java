@@ -7,12 +7,16 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TabHost;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends TabActivity {
+    FirebaseAuth firebaseAuth;  //로그아웃
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        firebaseAuth = FirebaseAuth.getInstance();  //로그아웃
 
         ImageButton manualButton = (ImageButton) findViewById(R.id.manual_registration_btn);
         manualButton.setOnClickListener(new View.OnClickListener() {
@@ -47,5 +51,9 @@ public class MainActivity extends TabActivity {
         tabHost.addTab(tabSpecUse);
 
         tabHost.setCurrentTab(0);
+    }
+    public void logout(View view){
+        firebaseAuth.signOut();
+        finish();
     }
 }
