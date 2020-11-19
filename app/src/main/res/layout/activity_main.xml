@@ -43,14 +43,31 @@
                 android:background="#FFEFA0"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <ImageButton
-                    android:id="@+id/registration"
-                    android:layout_width="300dp"
-                    android:layout_height="150dp"
+                    android:id="@+id/automatic_registration_btn"
+                    android:layout_width="265dp"
+                    android:layout_height="140dp"
+                    android:src="@drawable/automatic"
+                    android:scaleType="fitXY"/>
+
+                <ImageButton
+                    android:id="@+id/manual_registration_btn"
+                    android:layout_width="265dp"
+                    android:layout_height="140dp"
                     android:src="@drawable/manual"
                     android:scaleType="fitXY"/>
+
+                <Button
+                    android:onClick="logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:textColor="#ffffff"
+                    android:text="로그아웃"/>
 
             </LinearLayout>
 
@@ -59,13 +76,8 @@
                 android:background="#A0FFEC"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:layout_width="300dp"
-                    android:layout_height="150dp"
-                    android:src="@drawable/manual"
-                    android:scaleType="fitXY"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
             </LinearLayout>
 
@@ -74,13 +86,8 @@
                 android:background="#F6A0FF"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:layout_width="300dp"
-                    android:layout_height="150dp"
-                    android:src="@drawable/manual"
-                    android:scaleType="fitXY"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
             </LinearLayout>
 
