@@ -1,7 +1,10 @@
 package com.example.gift;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +21,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
+    private String TAG = "LoginActivity";
+
+    public boolean loginSaved;
+    private SharedPreferences loginData;
+
     private FirebaseAuth auth;
     EditText emailTxt, passwordTxt;
     Button loginBtn;
@@ -34,8 +42,14 @@ public class LoginActivity extends AppCompatActivity {
 
         loginBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                String email = emailTxt.getText().toString();
-                String password = passwordTxt.getText().toString();
+                final String email = emailTxt.getText().toString();
+                final String password = passwordTxt.getText().toString();
+                if(email.getBytes().length == 0 || password.getBytes().length == 0){
+                    Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 확인해주세요.",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Log.d(TAG, "email : "+email+"  password : "+password);
                 auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -43,14 +57,12 @@ public class LoginActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(LoginActivity.this, "로그인 성공",
                                             Toast.LENGTH_SHORT).show();
-                                    FirebaseUser user = auth.getCurrentUser();
-                                    ///////////////
+                                    saveLogin(email, password);
                                     Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                                     LoginActivity.this.startActivity(mainIntent);
-                                    /////////////////
                                     //updateUI(user);
                                 } else {
-                                    Toast.makeText(LoginActivity.this, "로그인 실패",
+                                    Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 확인해주세요.",
                                             Toast.LENGTH_SHORT).show();
                                     //updateUI(null);
                                     // ...
@@ -70,5 +82,15 @@ public class LoginActivity extends AppCompatActivity {
                 LoginActivity.this.startActivity(registerIntent);
             }
         });
+    }
+    public void saveLogin(String email, String password){
+        //sharedpreferences 이용해서 입력한 아이디 비밀번호 저장하기...
+        loginData = getSharedPreferences("loginData", MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = loginData.edit();
+        editor.putString("email", email);
+        editor.putString("password", password);
+
+        editor.commit();
     }
 }
