@@ -4,6 +4,8 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TabHost;
 import android.widget.Toast;
 
@@ -14,12 +16,35 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends TabActivity {
+    FirebaseAuth firebaseAuth;  //로그아웃
+
     private SharedPreferences loginData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        firebaseAuth = FirebaseAuth.getInstance();  //로그아웃
+
+        ImageButton manualButton = (ImageButton) findViewById(R.id.manual_registration_btn);
+        manualButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent manualIntent = new Intent(MainActivity.this, ManualActivity.class);
+                MainActivity.this.startActivity(manualIntent);
+            }
+        });
+
+        ImageButton automaticButton = (ImageButton) findViewById(R.id.automatic_registration_btn);
+        automaticButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent automaticIntent = new Intent(MainActivity.this, AutomaticActivity.class);
+                MainActivity.this.startActivity(automaticIntent);
+            }
+        });
 
         autoLogin(); //자동로그인 -------------------------------
 
@@ -38,6 +63,10 @@ public class MainActivity extends TabActivity {
         tabHost.addTab(tabSpecUse);
 
         tabHost.setCurrentTab(0);
+    }
+    public void logout(View view){
+        firebaseAuth.signOut();
+        finish();
     }
     public void autoLogin(){
         //로그인데이터에서 내용 읽어오기
