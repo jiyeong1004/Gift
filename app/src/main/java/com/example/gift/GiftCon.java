@@ -7,8 +7,12 @@ public class GiftCon {
     private String code;
     private boolean available;
 
-    public GiftCon(){
-
+    public GiftCon(String image, String store, String DDAY, String code, boolean available) {
+        this.image = image;
+        this.store = store;
+        this.DDAY = DDAY;
+        this.code = code;
+        this.available = available;
     }
 
     public String getImage() {
@@ -50,6 +54,7 @@ public class GiftCon {
     public void setAvailable(boolean available) {
         this.available = available;
     }
+
     public void encodeImage(){
 
     }
