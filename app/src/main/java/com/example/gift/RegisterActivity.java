@@ -16,6 +16,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.regex.Pattern;
+
 public class RegisterActivity extends AppCompatActivity {
     FirebaseAuth auth;
     EditText emailTxt, passwordTxt;
@@ -50,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
                             Intent mainIntent = new Intent(RegisterActivity.this, LoginActivity.class);
                             RegisterActivity.this.startActivity(mainIntent);
                         } else {
-                            if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                            if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() && !Pattern.matches("^[a-zA-Z0-9]+@[a-zA-Z0-9]+$", email)){
                                 Toast.makeText(RegisterActivity.this, "이메일 형식을 확인해주세요.",
                                         Toast.LENGTH_SHORT).show();
                             }else{
