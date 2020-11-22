@@ -38,13 +38,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         String title = "";
         switch (position){
             case 0:
-                title = "Home";
+                title = "전체";
                 break;
             case 1:
-                title = "Unuse";
+                title = "미사용";
                 break;
             case 2:
-                title = "Use";
+                title = "사용";
                 break;
         }
         return title;
