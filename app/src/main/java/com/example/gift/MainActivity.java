@@ -1,68 +1,45 @@
 package com.example.gift;
 
-import android.app.TabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TabHost;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-public class MainActivity extends TabActivity {
+public class MainActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;  //로그아웃
 
     private SharedPreferences loginData;
+
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         firebaseAuth = FirebaseAuth.getInstance();  //로그아웃
 
-        ImageButton manualButton = (ImageButton) findViewById(R.id.manual_registration_btn);
-        manualButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent manualIntent = new Intent(MainActivity.this, ManualActivity.class);
-                MainActivity.this.startActivity(manualIntent);
-            }
-        });
-
-        ImageButton automaticButton = (ImageButton) findViewById(R.id.automatic_registration_btn);
-        automaticButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent automaticIntent = new Intent(MainActivity.this, AutomaticActivity.class);
-                MainActivity.this.startActivity(automaticIntent);
-            }
-        });
-
         autoLogin(); //자동로그인 -------------------------------
 
-        TabHost tabHost = getTabHost();
+        mTabLayout = findViewById(R.id.tab_layout);
+        mViewPager = findViewById(R.id.view_pager);
 
-        TabHost.TabSpec tabSpecHome = tabHost.newTabSpec("Home").setIndicator("전체");
-        tabSpecHome.setContent(R.id.linear_home);
-        tabHost.addTab(tabSpecHome);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        mViewPager.setAdapter(viewPagerAdapter);
 
-        TabHost.TabSpec tabSpecUnuse = tabHost.newTabSpec("Unuse").setIndicator("미사용");
-        tabSpecUnuse.setContent(R.id.linear_unuse);
-        tabHost.addTab(tabSpecUnuse);
-
-        TabHost.TabSpec tabSpecUse = tabHost.newTabSpec("Use").setIndicator("사용");
-        tabSpecUse.setContent(R.id.linear_use);
-        tabHost.addTab(tabSpecUse);
-
-        tabHost.setCurrentTab(0);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
     public void logout(View view){
         firebaseAuth.signOut();
