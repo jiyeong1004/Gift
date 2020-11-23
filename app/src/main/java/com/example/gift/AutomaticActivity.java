@@ -1,6 +1,8 @@
 package com.example.gift;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
@@ -51,6 +55,12 @@ public class AutomaticActivity extends AppCompatActivity {
         ocrImgBtn = findViewById(R.id.ocrImageButton);
         readTxt = findViewById(R.id.readText);
 
+        //내부 저장소 쓰기/읽기 권한 받기
+        getStorageAccessPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        getStorageAccessPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+        // ------------------------------
+
+        //갤러리에서 이미지 가져오기
         loadImgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,17 +69,13 @@ public class AutomaticActivity extends AppCompatActivity {
                 startActivityForResult(intent, GET_GALLERY_IMAGE);
             }
         });
+        //이미지 ocr인식하기 (하...)
         ocrImgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dataPath = getFilesDir() + "/tessdata/";
-                checkFile(new File(dataPath + "/tessdata/"), "kor");
-
-                String lang = "kor";
-                tess  = new TessBaseAPI();
-                tess.init(dataPath, lang);
+                Tesseract();
                 try{
-                    selectedImageBitmap = BitmapFactory.decodeFile(getPathFromURI(selectedImageURI));
+                    selectedImageBitmap = BitmapFactory.decodeFile(getRealPathFromURI(selectedImageURI));
                     processImage(selectedImageBitmap);
                 }catch(Exception e){
                     Toast.makeText(AutomaticActivity.this, "이미지를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
@@ -86,14 +92,26 @@ public class AutomaticActivity extends AppCompatActivity {
         if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null & data.getData() != null) {
             selectedImageURI = data.getData();
             imgView.setImageURI(selectedImageURI);
-            Log.e("AutomaticActivty", getPathFromURI(selectedImageURI));
+            Log.e("AutomaticActivty", getRealPathFromURI(selectedImageURI));
         }
     }
+    public void Tesseract(){
+        //언어파일 경로
+        dataPath = getFilesDir() + "/tesseract/";
+        //트레이닝데이터가 카피되어 있는지 체크
+        checkFile(new File(dataPath + "tessdata/"), "kor");
+        String lang = "kor";
+
+        Log.e("AutomaticActivty", dataPath);
+
+        tess  = new TessBaseAPI();
+        tess.init(dataPath, lang); //여기가 문제
+    }
     //uri에서 이미지 절대경로 가져옴
-    private String getPathFromURI(Uri imgURI){
+    private String getRealPathFromURI(Uri contentURI){
         String result = null;
         String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(imgURI, proj, null, null, null);
+        Cursor cursor = getContentResolver().query(contentURI, proj, null, null, null);
 
         if(cursor != null) {
             cursor.moveToFirst();
@@ -120,7 +138,7 @@ public class AutomaticActivity extends AppCompatActivity {
         }
         //디렉토리가 있지만 파일이 없으면 파일카피 진행
         if (dir.exists()) {
-            String datafilepath = dataPath + "tessdata/" + Language + ".traineddata";
+            String datafilepath = dataPath + "/tessdata/" + Language + ".traineddata";
             File datafile = new File(datafilepath);
             if (!datafile.exists()) {
                 copyFiles(Language);
@@ -131,9 +149,12 @@ public class AutomaticActivity extends AppCompatActivity {
     private void copyFiles(String Language) {
         try {
             String filepath = dataPath + "/tessdata/" + Language + ".traineddata";
+
             AssetManager assetManager = getAssets();
+
             InputStream instream = assetManager.open("tessdata/"+Language+".traineddata");
             OutputStream outstream = new FileOutputStream(filepath);
+
             byte[] buffer = new byte[1024];
             int read;
             while ((read = instream.read(buffer)) != -1) {
@@ -147,6 +168,19 @@ public class AutomaticActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    private void getStorageAccessPermission(String permission){
+        Log.e("권한 확인", String.valueOf(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)));
+        if (ContextCompat.checkSelfPermission(this, permission)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    permission)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{permission},
+                        1);
+            }
         }
     }
 }
