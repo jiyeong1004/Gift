@@ -14,16 +14,14 @@ public class GiftCon implements Serializable {
     private String productName;
     private String store;
     private String DDAY;
-    private String code;
     private FirebaseUser owner;
     private boolean available;
 
-    public GiftCon(String image, String productName, String store, String DDAY, String code, FirebaseUser owner, boolean available) {
+    public GiftCon(String image, String productName, String store, String DDAY, FirebaseUser owner, boolean available) {
         this.image = image;
         this.productName = productName;
         this.store = store;
         this.DDAY = DDAY;
-        this.code = code;
         this.owner = owner;
         this.available = available;
     }
@@ -46,14 +44,6 @@ public class GiftCon implements Serializable {
 
     public void setDDAY(String DDAY) {
         this.DDAY = DDAY;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public FirebaseUser getOwner() {return owner;}
