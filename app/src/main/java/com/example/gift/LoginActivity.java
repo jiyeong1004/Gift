@@ -23,10 +23,10 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginActivity extends AppCompatActivity {
     private String TAG = "LoginActivity";
 
-    public boolean loginSaved;
-    private SharedPreferences loginData;
-
     private FirebaseAuth auth;
+    private SharedPreferences loginData;
+    boolean loginSaved;
+
     EditText emailTxt, passwordTxt;
     Button loginBtn;
     @Override
@@ -39,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.btn_login);
 
         auth = FirebaseAuth.getInstance();
+        loginData = getSharedPreferences("loginData", MODE_PRIVATE);
 
         loginBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
@@ -73,7 +74,6 @@ public class LoginActivity extends AppCompatActivity {
                         });
             }
         });
-
         TextView registerButton = (TextView) findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,12 +85,10 @@ public class LoginActivity extends AppCompatActivity {
     }
     public void saveLogin(String email, String password){
         //sharedpreferences 이용해서 입력한 아이디 비밀번호 저장하기...
-        loginData = getSharedPreferences("loginData", MODE_PRIVATE);
-
         SharedPreferences.Editor editor = loginData.edit();
         editor.putString("email", email);
         editor.putString("password", password);
-
+        editor.putString("saved", "true");
         editor.commit();
     }
 }

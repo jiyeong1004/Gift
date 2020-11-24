@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="쿠폰 수동 등록"
+                android:text="쿠폰 등록"
                 android:textColor="#ffffff"
                 android:textSize="30dp"
                 android:textStyle="bold"
@@ -64,9 +64,19 @@
                 android:layout_marginTop="20dp"
                 android:padding="10dp"
                 android:background="#148F8D8D"/>
-
             <Button
-                android:id="@+id/registration_manualButton"
+                android:id="@+id/uploadImageButton"
+                android:text="이미지 업로드"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:background="@color/colorPrimaryDark"/>
+            <Button
+                android:id="@+id/registrationButton"
                 android:text="등록하기"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"

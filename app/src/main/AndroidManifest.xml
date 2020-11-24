@@ -2,12 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gift">
 
-    <uses-permission android:name="android.permission.INTERNET"/> <!-- 인터넷 사용 권한 -->
-    <uses-permission android:name="android.permission.VIBRATE"/>  <!-- 푸쉬가 올 때 진동 발생 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>  <!-- 화면을 깨워주는 권한 -->
-    <uses-permission android:name="android.permission.CAMERA"/> <!--카메라 권한-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> <!-- 내부 저장소 읽기 쓰기 권한 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 인터넷 사용 권한 -->
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 푸쉬가 올 때 진동 발생 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 화면을 깨워주는 권한 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -17,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AutomaticActivity"/>
+        <activity android:name=".AutomaticActivity" />
         <activity android:name=".ManualActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -26,8 +25,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity"/>
-        <activity android:name=".LoginActivity"/>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".LoginActivity" />
     </application>
 
 </manifest>
