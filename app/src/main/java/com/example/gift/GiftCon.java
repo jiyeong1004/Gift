@@ -10,12 +10,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 public class GiftCon implements Serializable {
-    private String image; //문자로 바꿔서 저장!
-    private String productName;
-    private String store;
-    private String DDAY;
+    private String image;  //문자로 바꿔서 저장!
+    private String productName;  //상품명
+    private String store;  //교환처
+    private String DDAY;  //유효기간
     private FirebaseUser owner;
-    private boolean available;
+    private boolean available;  //사용여부
 
     public GiftCon(String image, String productName, String store, String DDAY, FirebaseUser owner, boolean available) {
         this.image = image;
