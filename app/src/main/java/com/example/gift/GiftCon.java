@@ -10,14 +10,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 public class GiftCon implements Serializable {
-    private String image; //문자로 바꿔서 저장!
+    private Bitmap image;
+    private String encodedImage; //문자로 바꿔서 저장
     private String productName;
     private String store;
     private String DDAY;
     private FirebaseUser owner;
     private boolean available;
 
-    public GiftCon(String image, String productName, String store, String DDAY, FirebaseUser owner, boolean available) {
+    public GiftCon(Bitmap image, String productName, String store, String DDAY, FirebaseUser owner, boolean available) {
         this.image = image;
         this.productName = productName;
         this.store = store;
@@ -25,6 +26,10 @@ public class GiftCon implements Serializable {
         this.owner = owner;
         this.available = available;
     }
+
+    public String getEncodedImage() {return encodedImage;}
+
+    public void setEncodedImage(String decodedImage) {this.encodedImage = decodedImage;}
 
     public String getProductName() {return productName;}
 
@@ -62,19 +67,21 @@ public class GiftCon implements Serializable {
         ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
         bitmapImg.compress(Bitmap.CompressFormat.PNG, 100, byteArrayBitmapStream);
         byte[] b = byteArrayBitmapStream.toByteArray();
-        image = Base64.encodeToString(b, Base64.DEFAULT);
+        encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
     }
     public Bitmap decodeImage(){
         Bitmap decodedImg;
-        byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
+        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
         decodedImg = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         return decodedImg;
     }
     public void uploadToStorage(){
         //직렬화한 객체를 db에 저장
+        serialize();
     }
     public void downloadFromStorage(){
         //db에서 객체 받아오기!
+        deserialize();
     }
     //직렬화
     public void serialize(){
