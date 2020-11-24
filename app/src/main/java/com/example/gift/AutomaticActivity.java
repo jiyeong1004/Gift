@@ -1,30 +1,16 @@
 package com.example.gift;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,153 +19,77 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+
 public class AutomaticActivity extends AppCompatActivity {
-    private final int GET_GALLERY_IMAGE = 200;
-
-    private ImageView imgView;
-    private Button loadImgBtn;
-    private Button ocrImgBtn;
-    private TextView readTxt;
-
     TessBaseAPI tess;
-    Bitmap selectedImageBitmap;
-    Uri selectedImageURI;
-    String dataPath;
+    String dataPath = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_automatic);
 
-        imgView = findViewById(R.id.imageTest);
-        loadImgBtn = findViewById(R.id.loadImageButton);
-        ocrImgBtn = findViewById(R.id.ocrImageButton);
-        readTxt = findViewById(R.id.readText);
-
-        //내부 저장소 쓰기/읽기 권한 받기
-        getStorageAccessPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        getStorageAccessPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-        // ------------------------------
-
-        //갤러리에서 이미지 가져오기
-        loadImgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                startActivityForResult(intent, GET_GALLERY_IMAGE);
-            }
-        });
-        //이미지 ocr인식하기 (하...)
-        ocrImgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Tesseract();
-                try{
-                    selectedImageBitmap = BitmapFactory.decodeFile(getRealPathFromURI(selectedImageURI));
-                    processImage(selectedImageBitmap);
-                }catch(Exception e){
-                    Toast.makeText(AutomaticActivity.this, "이미지를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-            }
-        });
-    }
-
-    @Override //갤러리에서 이미지 가져와서 변수에 uri저장
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null & data.getData() != null) {
-            selectedImageURI = data.getData();
-            imgView.setImageURI(selectedImageURI);
-            Log.e("AutomaticActivty", getRealPathFromURI(selectedImageURI));
-        }
-    }
-    public void Tesseract(){
-        //언어파일 경로
+        //데이터 경로
         dataPath = getFilesDir() + "/tesseract/";
-        //트레이닝데이터가 카피되어 있는지 체크
+
+        //한글 데이터 체크
         checkFile(new File(dataPath + "tessdata/"), "kor");
+
+        //문자 인식을 수행할 tess 객체 생성
         String lang = "kor";
+        tess = new TessBaseAPI();
+        Log.e("tesseract 초기화", "직전!!!");
+        tess.init(dataPath, lang);
+        Log.e("tesseract 초기화", "성공~");
 
-        Log.e("AutomaticActivty", dataPath);
-
-        tess  = new TessBaseAPI();
-        tess.init(dataPath, lang); //여기가 문제
+        //문자 인식
+        processImage(BitmapFactory.decodeResource(getResources(), R.drawable.test));
     }
-    //uri에서 이미지 절대경로 가져옴
-    private String getRealPathFromURI(Uri contentURI){
-        String result = null;
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(contentURI, proj, null, null, null);
-
-        if(cursor != null) {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DATA);
-            result = cursor.getString(idx);
-            cursor.close();
-        }
-        return result;
-    }
-    //이미지 ocr인식하기
     public void processImage(Bitmap bitmap){
-        Toast.makeText(AutomaticActivity.this, "잠시만 기다려주세요.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "잠시만 기다려주세요.", Toast.LENGTH_SHORT).show();
         String OCRresult = null;
         tess.setImage(bitmap);
         OCRresult = tess.getUTF8Text();
-        Log.e("AutomaticActivty", String.valueOf(selectedImageURI) + "결과" + OCRresult);
-        readTxt.setText(OCRresult);
-    }
-    //파일이 있는지 확인
-    private void checkFile(File dir, String Language) {
-        //디렉토리가 없으면 디렉토리를 만들고 그후에 파일을 카피
-        if (!dir.exists() && dir.mkdirs()) {
-            copyFiles(Language);
-        }
-        //디렉토리가 있지만 파일이 없으면 파일카피 진행
-        if (dir.exists()) {
-            String datafilepath = dataPath + "/tessdata/" + Language + ".traineddata";
-            File datafile = new File(datafilepath);
-            if (!datafile.exists()) {
-                copyFiles(Language);
-            }
-        }
-    }
-    //파일 복사(왜? 일단 있길래 넣어둠)
-    private void copyFiles(String Language) {
-        try {
-            String filepath = dataPath + "/tessdata/" + Language + ".traineddata";
+        TextView OCRTextView = findViewById(R.id.ocr_result);
 
+        OCRTextView.setText(OCRresult);
+    }
+    private void copyFiles(String lang){
+        try{
+            //location we want the file to be at
+            String filepath = dataPath + "/tessdata/" + lang + ".traineddata";
+
+            //get access to AssetManager
             AssetManager assetManager = getAssets();
+            //open byte streams for reading/writing
+            InputStream inStream = assetManager.open("tessdata/" + lang + ".traineddata");
+            OutputStream outStream = new FileOutputStream(filepath);
 
-            InputStream instream = assetManager.open("tessdata/"+Language+".traineddata");
-            OutputStream outstream = new FileOutputStream(filepath);
-
+            //copy the file to the location specified by filepath
             byte[] buffer = new byte[1024];
             int read;
-            while ((read = instream.read(buffer)) != -1) {
-                outstream.write(buffer, 0, read);
+            while((read = inStream.read(buffer)) != -1){
+                outStream.write(buffer, 0, read);
             }
-            outstream.flush();
-            outstream.close();
-            instream.close();
-
-        } catch (FileNotFoundException e) {
+            outStream.flush();
+            outStream.close();
+            inStream.close();
+        }catch(FileNotFoundException e){
             e.printStackTrace();
-        } catch (IOException e) {
+        }catch(IOException e){
             e.printStackTrace();
         }
     }
-    private void getStorageAccessPermission(String permission){
-        Log.e("권한 확인", String.valueOf(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)));
-        if (ContextCompat.checkSelfPermission(this, permission)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    permission)) {
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{permission},
-                        1);
+    private void checkFile(File dir, String lang){
+        //directory does not exist, but we can successfully create it
+        if(!dir.exists()&&dir.mkdirs()){
+            copyFiles(lang);
+        }
+        //The directory exists, but there is no data file in it
+        if(dir.exists()){
+            String datafilePath = dataPath + "/tessdata/" + lang + ".traineddata";
+            File datafile = new File(datafilePath);
+            if(!datafile.exists()){
+                copyFiles(lang);
             }
         }
     }
