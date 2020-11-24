@@ -1,27 +1,34 @@
 package com.example.gift;
 
-public class GiftCon {
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
+import com.google.firebase.auth.FirebaseUser;
+
+import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
+
+public class GiftCon implements Serializable {
     private String image; //문자로 바꿔서 저장!
+    private String productName;
     private String store;
     private String DDAY;
-    private String code;
+    private FirebaseUser owner;
     private boolean available;
 
-    public GiftCon(String image, String store, String DDAY, String code, boolean available) {
+    public GiftCon(String image, String productName, String store, String DDAY, FirebaseUser owner, boolean available) {
         this.image = image;
+        this.productName = productName;
         this.store = store;
         this.DDAY = DDAY;
-        this.code = code;
+        this.owner = owner;
         this.available = available;
     }
 
-    public String getImage() {
-        return image;
-    }
+    public String getProductName() {return productName;}
 
-    public void setImage(String image) {
-        this.image = image;
-    }
+    public void setProductName(String productName) {this.productName = productName;}
 
     public String getStore() {
         return store;
@@ -39,13 +46,9 @@ public class GiftCon {
         this.DDAY = DDAY;
     }
 
-    public String getCode() {
-        return code;
-    }
+    public FirebaseUser getOwner() {return owner;}
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+    public void setOwner(FirebaseUser owner) {this.owner = owner;}
 
     public boolean isAvailable() {
         return available;
@@ -55,7 +58,30 @@ public class GiftCon {
         this.available = available;
     }
 
-    public void encodeImage(){
+    public void encodeImage(Bitmap bitmapImg){
+        ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
+        bitmapImg.compress(Bitmap.CompressFormat.PNG, 100, byteArrayBitmapStream);
+        byte[] b = byteArrayBitmapStream.toByteArray();
+        image = Base64.encodeToString(b, Base64.DEFAULT);
+    }
+    public Bitmap decodeImage(){
+        Bitmap decodedImg;
+        byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
+        decodedImg = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        return decodedImg;
+    }
+    public void uploadToStorage(){
+        //직렬화한 객체를 db에 저장
+    }
+    public void downloadFromStorage(){
+        //db에서 객체 받아오기!
+    }
+    //직렬화
+    public void serialize(){
+
+    }
+    //역직렬화
+    public void deserialize(){
 
     }
 }
