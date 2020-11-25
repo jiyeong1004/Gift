@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -35,14 +36,16 @@ public class ManualActivity extends AppCompatActivity {
     Uri selectedImageURI;
 
     Button uploadImgBtn, registrationBtn;
-    EditText productTxt = findViewById(R.id.productText),
-            storeTxt = findViewById(R.id.storeText),
-            dDayTxt = findViewById(R.id.dDayText);
+    EditText productTxt, storeTxt, dDayTxt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual);
         //자동등록에서 오씨알 해서 여기로 넘어오기
+        productTxt = findViewById(R.id.productText);
+        storeTxt = findViewById(R.id.storeText);
+        dDayTxt = findViewById(R.id.dDayText);
+
         uploadImgBtn = findViewById(R.id.uploadImageButton);
         uploadImgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,18 +63,20 @@ public class ManualActivity extends AppCompatActivity {
                 productName = productTxt.getText().toString();
                 store = storeTxt.getText().toString();
                 DDAY = dDayTxt.getText().toString();
-                image = BitmapFactory.decodeFile(getRealPathFromURI(selectedImageURI));
+                image = BitmapFactory.decodeFile(getRealPathFromUri(selectedImageURI));
                 if(productName.equals("") || store.equals("") || DDAY.equals("") || image == null){
                     Toast.makeText(ManualActivity.this, "모두 입력해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                giftCon = new GiftCon(image, productName, store, DDAY, owner, true);
-                giftCon.uploadToStorage();
+                String filepath = Environment.getExternalStorageDirectory().getAbsolutePath();
+                Log.e("파일 경로", filepath);
+                giftCon = new GiftCon(image, productName, store, DDAY, owner.getEmail(), true);
+                giftCon.uploadToStorage(filepath);
                 finish();
             }
         });
     }
-    private String getRealPathFromURI(Uri contentURI){
+    private String getRealPathFromUri(Uri contentURI){
         String result = null;
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(contentURI, proj, null, null, null);
@@ -84,6 +89,7 @@ public class ManualActivity extends AppCompatActivity {
         }
         return result;
     }
+
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null & data.getData() != null) {

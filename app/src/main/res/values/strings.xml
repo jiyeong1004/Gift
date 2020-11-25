@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Gift</string>
+    <!-- TODO: Remove or change this placeholder text -->
+<!--    <string name="home_fragment"></string>-->
+<!--    <string name="unuse_fragment"></string>-->
+<!--    <string name="use_fragment"></string>-->
 </resources>
